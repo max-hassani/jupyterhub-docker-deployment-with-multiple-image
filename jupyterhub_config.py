@@ -13,7 +13,8 @@ c = get_config()
 # Spawn single-user servers as Docker containers
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 # Spawn containers from this image
-c.DockerSpawner.container_image = os.environ['DOCKER_NOTEBOOK_IMAGE']
+#c.DockerSpawner.container_image = os.environ['DOCKER_NOTEBOOK_IMAGE']
+c.DockerSpawner.image_whitelist = {'base':'jupyterhub-user', 'pyiron':'jupyterhub-pyiron'}
 # JupyterHub requires a single-user instance of the Notebook server, so we
 # default to using the `start-singleuser.sh` script included in the
 # jupyter/docker-stacks *-notebook images as the Docker run command when
@@ -53,8 +54,8 @@ c.JupyterHub.ssl_key = os.environ['SSL_KEY']
 c.JupyterHub.ssl_cert = os.environ['SSL_CERT']
 
 # Authenticate users with GitHub OAuth
-c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
-c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
+c.JupyterHub.authenticator_class = 'jupyterhub.auth.PAMAuthenticator'
+#c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
 
 # Persist hub data on volume mounted inside container
 data_dir = os.environ.get('DATA_VOLUME_CONTAINER', '/data')
